@@ -1,0 +1,20 @@
+# Install git-lfs package
+sudo apt-get install git-lfs 
+
+# Initialize Git LFS 
+git lfs install
+
+# This command specifies which files should be handled by Git LFS
+git lfs track "models/rmbg.onnx"
+
+# Add the .gitattributes file to the staging area to ensure it's included in the next commit.
+git add .gitattributes
+
+# Rewrite Git history to move the large file to LFS. This is a critical step that modifies previous commits. This command will analyze the repository's history and replace the large file with a small LFS pointer.
+git lfs migrate import --include="models/rmbg.onnx" --verbose
+
+# Because the history was rewritten, a regular git push will be rejected. You must use --force to update the remote branch.
+git push --force origin main
+
+# To find the LFS pointer content for models/rmbg.onnx
+git show HEAD:models/rmbg.onnx
